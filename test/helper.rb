@@ -17,21 +17,21 @@ class Test::Unit::TestCase
   
   def open_file(name)
     @openfiles ||= []
-    File.open(File.join( File.dirname(__FILE__), 'data', name), 'r')
-    # @openfiles << file
-    # file
+    file = File.open(File.join( File.dirname(__FILE__), 'data', name), 'r')
+    @openfiles << file
+    file
   end
-    # 
-    # def setup 
-    #   @openfiles = []    
-    # end
-    # 
-    # def teardown
-    #   unless @openfiles.nil? 
-    #     @openfiles.each do |f|
-    #       f.close 
-    #     end
-    #   end
-    # end
+  
+  def setup 
+    @openfiles = []    
+  end
+  
+  def teardown
+    unless @openfiles.nil? 
+      @openfiles.each do |f|
+        f.close 
+      end
+    end
+  end
   
 end

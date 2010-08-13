@@ -6,13 +6,7 @@ class TestJointExif < Test::Unit::TestCase
     MongoMapper.database.collections.each {|c| c.remove }
   end
   
-  # def teardown
-  #   unless @openfiles.nil? 
-  #     @openfiles.each do |f|
-  #     f.close 
-  #     end
-  #   end
-  # end
+
     
   should 'raise an exception if Joint is not loaded' do 
     assert_raise JointExif::JointMissing do 
