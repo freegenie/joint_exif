@@ -7,7 +7,5 @@ class Photo
   key :title, String 
   attachment :image
   exif_for :image
-  
-  
 end
 

@@ -1,6 +1,7 @@
 # encoding: UTF-8
 require 'exifr'
 require 'joint_exif/exif_data'
+require 'mongo'
 
 module JointExif
 
@@ -41,6 +42,7 @@ module JointExif
 
       def extract_exif_data
         self.exif_attachment_names.each do |name|
+          
           next unless extract_exif_data?(name)
           next unless (jpeg?(name) or tiff?(name))
           next unless send("#{name}?")
@@ -48,12 +50,11 @@ module JointExif
           callable  = jpeg?(name) ? EXIFR::JPEG : EXIFR::TIFF
           data_key  = "#{name}_exif_data".to_sym
           time_key  = "#{name}_exif_extracted_at".to_sym
-          file      = send("#{name}")
-          exif      = callable.new( StringIO.new(file.read) )
-                    
-          exif_data = ExifData.new(exif)
-
+          exif      = callable.new(StringIO.new(send("#{name}").read))                     
+          exif_data = ExifData.new(exif.to_hash)
           set( data_key => exif_data , time_key => Time.now )
+          # TODO: how can I avoid this? 
+          reload 
         end
       end
 
@@ -66,7 +67,7 @@ module JointExif
       end
 
       def extract_exif_data?(name)
-        eval("#{name}_exif_extracted_at").nil?
+        send("#{name}_exif_extracted_at").nil?
       end
 
   end

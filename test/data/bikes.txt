@@ -1,0 +1,186 @@
+hash --> 2152684828
+__id__ --> 2152684828
+object_id --> 2152684828
+to_enum --> #<Enumerator:0x0000010093b768>
+enum_for --> #<Enumerator:0x0000010093b650>
+! --> false
+new_subfile_type --> 
+subfile_type --> 
+image_width --> 
+image_length --> 
+bits_per_sample --> 
+compression --> 
+photometric_interpretation --> 
+threshholding --> 
+cell_width --> 
+cell_length --> 
+fill_order --> 
+document_name --> 
+image_description --> 
+make --> Apple
+model --> iPhone
+strip_offsets --> 
+orientation --> 
+samples_per_pixel --> 
+rows_per_strip --> 
+strip_byte_counts --> 
+min_sample_value --> 
+max_sample_value --> 
+x_resolution --> 72/1
+y_resolution --> 72/1
+planar_configuration --> 
+page_name --> 
+x_position --> 
+y_position --> 
+free_offsets --> 
+free_byte_counts --> 
+gray_response_unit --> 
+gray_response_curve --> 
+t4_options --> 
+t6_options --> 
+resolution_unit --> 2
+transfer_function --> 
+software --> 
+date_time --> 2009-08-04 19:38:13 +0200
+artist --> 
+host_computer --> 
+predictor --> 
+white_point --> 
+primary_chromaticities --> 
+color_map --> 
+halftone_hints --> 
+tile_width --> 
+tile_length --> 
+tile_offsets --> 
+tile_byte_counts --> 
+bad_fax_lines --> 
+clean_fax_data --> 
+consecutive_bad_fax_lines --> 
+sub_ifds --> 
+ink_set --> 
+ink_names --> 
+number_of_inks --> 
+dot_range --> 
+target_printer --> 
+extra_samples --> 
+transfer_range --> 
+clip_path --> 
+x_clip_path_units --> 
+y_clip_path_units --> 
+indexed --> 
+jpeg_tables --> 
+opi_proxy --> 
+global_parameters_ifd --> 
+profile_type --> 
+fax_profile --> 
+coding_methods --> 
+version_year --> 
+mode_number --> 
+decode --> 
+default_image_color --> 
+jpegproc --> 
+jpeg_interchange_format --> 
+jpeg_interchange_format_length --> 
+jpeg_restart_interval --> 
+jpeg_lossless_predictors --> 
+jpeg_point_transforms --> 
+jpeg_q_tables --> 
+jpeg_dc_tables --> 
+jpeg_ac_tables --> 
+ycb_cr_coefficients --> 
+ycb_cr_sub_sampling --> 
+ycb_cr_positioning --> 1
+reference_black_white --> 
+strip_row_counts --> 
+xmp --> 
+image_id --> 
+image_layer --> 
+copyright --> 
+iptc --> 
+exposure_time --> 
+f_number --> 14/5
+exposure_program --> 
+spectral_sensitivity --> 
+iso_speed_ratings --> 
+oecf --> 
+exif_version --> 
+date_time_original --> 2009-08-04 19:38:13 +0200
+date_time_digitized --> 2009-08-04 19:38:13 +0200
+components_configuration --> 
+compressed_bits_per_pixel --> 
+shutter_speed_value --> 
+aperture_value --> 
+brightness_value --> 
+exposure_bias_value --> 
+max_aperture_value --> 
+subject_distance --> 
+metering_mode --> 
+light_source --> 
+flash --> 
+focal_length --> 
+subject_area --> 
+maker_note --> 
+user_comment --> 
+subsec_time --> 
+subsec_time_orginal --> 
+subsec_time_digitized --> 
+flashpix_version --> 
+color_space --> 1
+pixel_x_dimension --> 600
+pixel_y_dimension --> 800
+related_sound_file --> 
+flash_energy --> 
+spatial_frequency_response --> 
+focal_plane_x_resolution --> 
+focal_plane_y_resolution --> 
+focal_plane_resolution_unit --> 
+subject_location --> 
+exposure_index --> 
+sensing_method --> 
+file_source --> 
+scene_type --> 
+cfa_pattern --> 
+custom_rendered --> 
+exposure_mode --> 
+white_balance --> 
+digital_zoom_ratio --> 
+focal_length_in_35mm_film --> 
+scene_capture_type --> 
+gain_control --> 
+contrast --> 
+saturation --> 
+sharpness --> 
+device_setting_description --> 
+subject_distance_range --> 
+image_unique_id --> 
+gps_version_id --> 
+gps_latitude_ref --> N
+gps_latitude --> [(39/1), (1306/25), (0/1)]
+gps_longitude_ref --> E
+gps_longitude --> [(18/1), (429/50), (0/1)]
+gps_altitude_ref --> 
+gps_altitude --> 
+gps_time_stamp --> [(19/1), (38/1), (1321/100)]
+gps_satellites --> 
+gps_status --> 
+gps_measure_mode --> 
+gps_dop --> 3/1
+gps_speed_ref --> 
+gps_speed --> 
+gps_track_ref --> 
+gps_track --> 
+gps_img_direction_ref --> 
+gps_img_direction --> 
+gps_map_datum --> 
+gps_dest_latitude_ref --> 
+gps_dest_latitude --> 
+gps_dest_longitude_ref --> 
+gps_dest_longitude --> 
+gps_dest_bearing_ref --> 
+gps_dest_bearing --> 
+gps_dest_distance_ref --> 
+gps_dest_distance --> 
+gps_processing_method --> 
+gps_area_information --> 
+gps_date_stamp --> 
+gps_differential --> 
