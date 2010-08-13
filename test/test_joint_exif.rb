@@ -97,7 +97,20 @@ class TestJointExif < Test::Unit::TestCase
       # assert photo.image_exif_extracted_at.is_a?(Time)
     end
     
-
+    should 'remove exif data if attached image is removed' do 
+      @photo.image = nil 
+      @photo.save
+      assert @photo.image_exif_extracted_at == nil 
+      assert @photo.image_exif_data == nil 
+    end
+    
+    should 'rework exif data everytime the image changed' do 
+      t  = @photo.image_exif_extracted_at 
+      @photo.image = open_file('sky.jpg')
+      @photo.save 
+      assert t != @photo.image_exif_extracted_at
+    end
+    
   end
   
   
