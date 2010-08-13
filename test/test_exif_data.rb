@@ -12,6 +12,8 @@ class TestExifData < Test::Unit::TestCase
     should 'accept an hash on init' do         
       assert_equal @h.count, @exif.exif.count
     end
+    
+
 
   end
 

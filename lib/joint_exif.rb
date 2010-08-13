@@ -1,12 +1,13 @@
 # encoding: UTF-8
 require 'exifr'
 require 'joint_exif/exif_data'
+require 'joint_exif/gps_math'
 require 'mongo'
 
 module JointExif
 
   def self.configure(model)
-
+    
     unless model.included_modules.include?(Joint::InstanceMethods)
       raise JointMissing.new('Need to plug Joint before ExifJoint')
     end
@@ -41,6 +42,7 @@ module JointExif
     private
 
       def extract_exif_data
+        
         self.exif_attachment_names.each do |name|
           
           next unless extract_exif_data?(name)
@@ -50,7 +52,12 @@ module JointExif
           callable  = jpeg?(name) ? EXIFR::JPEG : EXIFR::TIFF
           data_key  = "#{name}_exif_data".to_sym
           time_key  = "#{name}_exif_extracted_at".to_sym
-          exif      = callable.new(StringIO.new(send("#{name}").read))                     
+          
+          # This used to be self.send(name)
+          # but does not work with reload
+          readable  = self.class.find!(self.id).send(name)
+            
+          exif      = callable.new(StringIO.new(readable.read))                     
           exif_data = ExifData.new(exif.to_hash)
           set( data_key => exif_data , time_key => Time.now )
           # TODO: how can I avoid this? 

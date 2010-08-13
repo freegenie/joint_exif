@@ -1,19 +1,41 @@
 module JointExif
 
   class ExifData
+    
+    # TODO: add further know rational arrays here 
+    GpsArrays = [:gps_latitude, :gps_longitude, :gps_time_stamp]
+    
+    attr_reader :gps
 
     def initialize(value={})
-      rationals = []
+      rationals = GpsArrays.dup
+      
       value.symbolize_keys!
+      
       # remove data types we don't want/cannot to save
-      value.delete_if do |key, value|
-        ![Fixnum, Float, String, Rational].include?(value.class)
+      value.delete_if do |k, v|
+        ![Fixnum, Float, String, Rational, Array].include?(v.class)
+      end
+      
+      value.delete_if do |k, v|
+        v.is_a?(Array) and !GpsArrays.include?(k)
       end
 
-      value.each_pair do |key, value|
-        rationals << key  if value.is_a?(Rational)
+      value.each_pair do |k, v|
+        rationals << k if v.is_a?(Rational)
       end
-
+      
+      if value[:gps_latitude] && value[:gps_latitude_ref] && \
+          value[:gps_longitude] && value[:gps_longitude_ref]
+        
+        @gps = JointExif::GpsMath.new(
+          value[:gps_latitude], 
+          value[:gps_latitude_ref], 
+          value[:gps_longitude], 
+          value[:gps_longitude_ref])
+          
+      end
+      
       @value = {}
       @value = {:exif => value, :rationals => rationals }
     end
@@ -23,7 +45,7 @@ module JointExif
     end
 
     def rationals
-      @value[:rationals] || []
+      @value[:rationals] || GpsArrays
     end
 
     def rationals=(value)
@@ -38,12 +60,17 @@ module JointExif
       @value[:exif] || {}
     end
 
+    
     private
 
       # checks the value has to be converted back to rational
       def convert(key)
         if rationals.include?(key)
-          exif[key].to_r
+          if GpsArrays.include?(key)
+            exif[key].map {|n| n.to_r }
+          else 
+            exif[key].to_r
+          end
         else
           exif[key]
         end
@@ -56,13 +83,19 @@ module JointExif
         raise "Unexpected data type", value.class.to_s unless value.is_a?(BSON::OrderedHash)
         
         value.symbolize_keys!
-        value[:rationals] ||= []
+        value[:rationals] ||= GpsArrays.dup
         value[:exif]      ||= {}
         
         value[:exif].symbolize_keys!
         
         value[:exif].each_pair do |k,v|
-          v = value[:rationals].include?(k) ? v.to_r : v
+          if value[:rationals].include?(k)
+            if GpsArrays.include?(k)
+              v = v.map {|n| n.to_r}
+            else 
+              v = v.to_r
+            end            
+          end          
           value[:exif].update(k => v)
         end        
         ExifData.new(value[:exif])
@@ -73,7 +106,13 @@ module JointExif
         return value if value.is_a?(BSON::OrderedHash)
         to_be_saved = {}        
         value.exif.each_pair do |k,v|
-          v = value.rationals.include?(k) ? v.to_s : v
+          if value.rationals.include?(k)
+            if GpsArrays.include?(k)
+              v = v.map {|n| n.to_s }
+            else 
+              v = v.to_s
+            end
+          end
           to_be_saved.update(k => v)
         end
         {:exif => to_be_saved, :rationals => value.rationals }

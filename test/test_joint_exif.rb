@@ -68,18 +68,36 @@ class TestJointExif < Test::Unit::TestCase
       photo = Photo.first
       assert photo.image_exif_data.exif[:f_number].is_a?(Rational)      
     end
-
-    should 'extract exif data again if exif_extracted_at is nil' do       
-      # @photo.reload      
-      # @photo.image_exif_extracted_at = nil           
-      # @photo.save  
-      
+    
+    should 'save gps_data from arrays of Rational' do 
       photo = Photo.first 
-      photo.image_exif_extracted_at = nil 
-      photo.save
-      assert photo.image_exif_extracted_at.is_a?(Time)
+      assert_equal 3, photo.image_exif_data.exif[:gps_longitude].count
+      assert_equal 3, photo.image_exif_data.exif[:gps_latitude].count      
+      # assert 3, photo.image_exif_data.exif[:gps_timestamp].count       
     end
     
+    should 'restore them to rational data type' do 
+      photo = Photo.first 
+      assert_equal Rational, photo.image_exif_data.exif[:gps_longitude][0].class
+    end
+
+    should 'access do gps transformations' do 
+      photo = Photo.first
+      assert_equal "33.8754608154297" , photo.image_exif_data.gps.latitude.to_s       
+      assert_equal "-116.30161960178" , photo.image_exif_data.gps.longitude.to_s
+    end
+    
+    should 'extract exif data again if exif_extracted_at is nil' do       
+      @photo.reload 
+      @photo.image_exif_extracted_at = nil           
+      @photo.save     
+      # photo = Photo.first 
+      # photo.image_exif_extracted_at = nil 
+      # photo.save
+      # assert photo.image_exif_extracted_at.is_a?(Time)
+    end
+    
+
   end
   
   
