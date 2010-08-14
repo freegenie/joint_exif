@@ -17,10 +17,7 @@ MongoMapper.database = 'joint_exif_test'
 class Photo  
   include MongoMapper::Document   
   plugin Joint  
-  # plugin JointExif  
-  # key :title, String   
-  attachment :image  
-  # exif_for :image
+  attachment :myattachment
 end
 
 
