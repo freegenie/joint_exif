@@ -27,7 +27,7 @@ module JointExif
         raise AttachmentMissing.new("#{name} must be a joint attachment.") \
       end
 
-      after_save :handle_exif_data
+      # after_save :handle_exif_data
 
       key "#{name}_exif_extracted_at", Time
       key "#{name}_exif_data", JointExif::ExifData
@@ -43,10 +43,14 @@ module JointExif
     private
 
       def handle_exif_data
-        self.exif_attachment_names.each do |name|        
-          if send("#{name}?")           
+        self.exif_attachment_names.each do |name|         
+          if send(name).nil? 
+            clear_exif_data(name)
+          else 
+            # if send("#{name}?")
             next unless extract_exif_data?(name)
-            next unless (jpeg?(name) or tiff?(name))                        
+            next unless (jpeg?(name) or tiff?(name))   
+                                 
             readable  = self.class.find!(self.id).send(name)
             
             # next if send("#{name}_exif_token") == readable.client_md5 
@@ -61,19 +65,17 @@ module JointExif
             exif_data = ExifData.new(exif.to_hash)
 
             set( data_key => exif_data , time_key => Time.now )
-            # TODO: how can I avoid this? 
-            reload 
-          else 
-            clear_exif_data(name)
+
+          # else 
+          #   clear_exif_data(name)
           end          
         end
+        # TODO: how can I avoid this?         
+        # reload 
       end
       
       def clear_exif_data(name)
-        self.exif_attachment_names -= name
-        eval("#{name}_exif_extracted_at = nil") 
-        eval("#{name}_exif_data = nil") 
-        eval("#{name}_exif_token = nil")
+        set("#{name}_exif_extracted_at".to_sym => nil, "#{name}_exif_data".to_sym => nil, "#{name}_exif_token".to_sym => nil )
       end
 
       def jpeg?(name)
