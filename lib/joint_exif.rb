@@ -27,11 +27,11 @@ module JointExif
         raise AttachmentMissing.new("#{name} must be a joint attachment.") \
       end
 
-      # after_save :handle_exif_data
+      after_save :handle_exif_data
 
-      key "#{name}_exif_extracted_at", Time
+      key "#{name}_exif_extracted_at", Float
       key "#{name}_exif_data", JointExif::ExifData
-      key "#{name}_exif_token", String
+      
       
       self.exif_attachment_names << name
 
@@ -41,41 +41,36 @@ module JointExif
   module InstanceMethods
 
     private
+    
+      def exif_data_for_image(name)
+        readable  = self.class.find!(self.id).send(name)
+        callable  = jpeg?(name) ? EXIFR::JPEG : EXIFR::TIFF
+        # This used to be self.send(name)
+        # but does not work with reload
+        exif      = callable.new(StringIO.new(readable.read))                     
+        ExifData.new(exif.to_hash)        
+      end
 
       def handle_exif_data
         self.exif_attachment_names.each do |name|         
-          if send(name).nil? 
-            clear_exif_data(name)
-          else 
-            # if send("#{name}?")
+          if !send("#{name}?")
+            # File has been removed
+            clear_exif_data(name)                        
+          else                         
+            # debugger
             next unless extract_exif_data?(name)
             next unless (jpeg?(name) or tiff?(name))   
-                                 
-            readable  = self.class.find!(self.id).send(name)
-            
-            # next if send("#{name}_exif_token") == readable.client_md5 
-            
-            callable  = jpeg?(name) ? EXIFR::JPEG : EXIFR::TIFF
             data_key  = "#{name}_exif_data".to_sym
             time_key  = "#{name}_exif_extracted_at".to_sym
-            token_key = "#{name}_exif_token".to_sym          
-            # This used to be self.send(name)
-            # but does not work with reload
-            exif      = callable.new(StringIO.new(readable.read))                     
-            exif_data = ExifData.new(exif.to_hash)
-
-            set( data_key => exif_data , time_key => Time.now )
-
-          # else 
-          #   clear_exif_data(name)
+            set( data_key => exif_data_for_image(name) , time_key => Time.now.to_f )
           end          
         end
         # TODO: how can I avoid this?         
-        # reload 
+        reload 
       end
       
       def clear_exif_data(name)
-        set("#{name}_exif_extracted_at".to_sym => nil, "#{name}_exif_data".to_sym => nil, "#{name}_exif_token".to_sym => nil )
+        set("#{name}_exif_extracted_at".to_sym => nil, "#{name}_exif_data".to_sym => nil )
       end
 
       def jpeg?(name)
@@ -87,7 +82,8 @@ module JointExif
       end
 
       def extract_exif_data?(name)
-        send("#{name}_exif_extracted_at").nil? 
+        # send("#{name}_exif_extracted_at").nil? 
+        true
       end
 
   end
