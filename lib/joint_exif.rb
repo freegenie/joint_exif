@@ -7,7 +7,7 @@ require 'mongo'
 module JointExif
 
   def self.configure(model)
-    
+
     unless model.included_modules.include?(Joint::InstanceMethods)
       raise JointMissing.new('Need to plug Joint before ExifJoint')
     end
@@ -31,8 +31,8 @@ module JointExif
 
       key "#{name}_exif_extracted_at", Float
       key "#{name}_exif_data", JointExif::ExifData
-      
-      
+
+
       self.exif_attachment_names << name
 
     end
@@ -41,34 +41,32 @@ module JointExif
   module InstanceMethods
 
     private
-    
       def exif_data_for_image(name)
         readable  = self.class.find!(self.id).send(name)
         callable  = jpeg?(name) ? EXIFR::JPEG : EXIFR::TIFF
         # This used to be self.send(name)
         # but does not work with reload
-        exif      = callable.new(StringIO.new(readable.read))                     
-        ExifData.new(exif.to_hash)        
+        exif      = callable.new(StringIO.new(readable.read))
+        ExifData.new(exif.to_hash)
       end
 
       def handle_exif_data
-        self.exif_attachment_names.each do |name|         
+        self.exif_attachment_names.each do |name|
           if !send("#{name}?")
             # File has been removed
-            clear_exif_data(name)                        
-          else                         
-            # debugger
+            clear_exif_data(name)
+          else
             next unless extract_exif_data?(name)
-            next unless (jpeg?(name) or tiff?(name))   
+            next unless (jpeg?(name) or tiff?(name))
             data_key  = "#{name}_exif_data".to_sym
             time_key  = "#{name}_exif_extracted_at".to_sym
             set( data_key => exif_data_for_image(name) , time_key => Time.now.to_f )
-          end          
+          end
         end
-        # TODO: how can I avoid this?         
-        reload 
+        # TODO: how can I avoid this?
+        reload
       end
-      
+
       def clear_exif_data(name)
         set("#{name}_exif_extracted_at".to_sym => nil, "#{name}_exif_data".to_sym => nil )
       end
@@ -82,7 +80,7 @@ module JointExif
       end
 
       def extract_exif_data?(name)
-        # send("#{name}_exif_extracted_at").nil? 
+        # send("#{name}_exif_extracted_at").nil?
         true
       end
 
